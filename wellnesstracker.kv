@@ -1,0 +1,238 @@
+# Filename: wellnesstracker.kv
+
+# --- LoginScreen Definition ---
+<LoginScreen>:
+    username_input: username_input_id
+    password_input: password_input_id
+    status_label: status_label_id
+    
+    name: 'login'
+    
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 40
+        spacing: 30
+        
+        MDLabel:
+            text: 'Wellness Tracker'
+            halign: 'center'
+            font_style: 'H4'
+            theme_text_color: 'Primary'
+            size_hint_y: 0.2
+            
+        MDTextField:
+            id: username_input_id
+            hint_text: 'Username'
+            icon_right: 'account'
+            size_hint_y: None
+            height: '48dp'
+            
+        MDTextField:
+            id: password_input_id
+            hint_text: 'Password (min 6 characters)'
+            icon_right: 'lock'
+            password: True
+            size_hint_y: None
+            height: '48dp'
+            
+        BoxLayout:
+            size_hint_y: None
+            height: '48dp'
+            spacing: 15
+            
+            MDRaisedButton:
+                text: 'LOGIN'
+                on_release: root.login()
+                md_bg_color: app.theme_cls.primary_color
+                
+            MDRaisedButton:
+                text: 'REGISTER'
+                on_release: root.register()
+                md_bg_color: app.theme_cls.accent_color
+                
+        MDLabel:
+            id: status_label_id
+            text: 'Please log in or register.'
+            halign: 'center'
+            theme_text_color: 'Hint'
+            size_hint_y: 0.2
+
+        Widget: # Spacer
+            size_hint_y: 1.0
+
+# --------------------------------------------------------------------
+# --- CheckInScreen Definition ---
+<CheckInScreen>:
+    mood_slider: mood_slider_id
+    stress_slider: stress_slider_id
+    anxiety_slider: anxiety_slider_id
+    gratitude_1: gratitude_1_id
+    gratitude_2: gratitude_2_id
+    gratitude_3: gratitude_3_id
+    thought_patterns: thought_patterns_id
+    save_status: save_status_id
+
+    name: 'checkin'
+
+    BoxLayout:
+        orientation: 'vertical'
+        
+        MDTopAppBar:
+            title: 'Daily Check-in'
+            elevation: 4
+            right_action_items: [['logout', lambda x: root.logout()]]
+
+        ScrollView:
+            
+            MDBoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 20
+                padding: [20, 20, 20, 20]
+                adaptive_height: True
+
+                # --- Mood Slider ---
+                MDLabel:
+                    text: f'Mood: {int(mood_slider_id.value)}/10'
+                    theme_text_color: 'Secondary'
+                    font_style: 'Body1'
+                    size_hint_y: None
+                    height: dp(30)
+                    
+                MDSlider:
+                    id: mood_slider_id
+                    min: 1
+                    max: 10
+                    value: 5
+                    step: 1
+                    size_hint_y: None
+                    height: dp(40)
+                
+                # --- Stress Slider ---
+                MDLabel:
+                    text: f'Stress Level: {int(stress_slider_id.value)}/10'
+                    theme_text_color: 'Secondary'
+                    font_style: 'Body1'
+                    size_hint_y: None
+                    height: dp(30)
+                    
+                MDSlider:
+                    id: stress_slider_id
+                    min: 1
+                    max: 10
+                    value: 5
+                    step: 1
+                    size_hint_y: None
+                    height: dp(40)
+
+                # --- Anxiety Slider ---
+                MDLabel:
+                    text: f'Anxiety Level: {int(anxiety_slider_id.value)}/10'
+                    theme_text_color: 'Secondary'
+                    font_style: 'Body1'
+                    size_hint_y: None
+                    height: dp(30)
+                    
+                MDSlider:
+                    id: anxiety_slider_id
+                    min: 1
+                    max: 10
+                    value: 5
+                    step: 1
+                    size_hint_y: None
+                    height: dp(40)
+
+                # --- Gratitude Section ---
+                MDLabel:
+                    text: '3 Things I am Grateful For:'
+                    font_style: 'Subtitle1'
+                    theme_text_color: 'Primary'
+                    size_hint_y: None
+                    height: dp(40)
+                    
+                MDTextField:
+                    id: gratitude_1_id
+                    hint_text: '1. Person or experience'
+                    size_hint_y: None
+                    height: dp(56)
+                    
+                MDTextField:
+                    id: gratitude_2_id
+                    hint_text: '2. Small joy or moment'
+                    size_hint_y: None
+                    height: dp(56)
+                    
+                MDTextField:
+                    id: gratitude_3_id
+                    hint_text: '3. A personal strength'
+                    size_hint_y: None
+                    height: dp(56)
+                
+                # --- Thought Patterns ---
+                MDLabel:
+                    text: 'Thought Patterns (Reflection)'
+                    font_style: 'Subtitle1'
+                    theme_text_color: 'Primary'
+                    size_hint_y: None
+                    height: dp(40)
+                    
+                MDTextField:
+                    id: thought_patterns_id
+                    hint_text: 'Describe any key thought patterns today...'
+                    multiline: True
+                    size_hint_y: None
+                    height: dp(120)
+                    
+                # Add some bottom padding
+                Widget:
+                    size_hint_y: None
+                    height: dp(20)
+                    
+        # --- Action Bar ---
+        MDBoxLayout:
+            size_hint_y: None
+            height: dp(56)
+            padding: [10, 5, 10, 5]
+            spacing: 10
+            
+            MDRaisedButton:
+                text: 'VIEW DATA'
+                on_release: root.go_to_dataview()
+                size_hint_x: 0.4
+                md_bg_color: app.theme_cls.accent_color
+
+            MDRaisedButton:
+                text: 'SAVE CHECK-IN'
+                on_release: root.save_checkin()
+                size_hint_x: 0.6
+                md_bg_color: app.theme_cls.primary_color
+
+        MDLabel:
+            id: save_status_id
+            text: ''
+            halign: 'center'
+            size_hint_y: None
+            height: dp(30)
+            theme_text_color: 'Primary'
+
+# --------------------------------------------------------------------
+# --- DataViewScreen Definition ---
+<DataViewScreen>:
+    data_list: data_list_id
+    name: 'dataview'
+    
+    BoxLayout:
+        orientation: 'vertical'
+        
+        MDTopAppBar:
+            title: 'Data History'
+            elevation: 4
+            left_action_items: [['arrow-left', lambda x: root.go_to_checkin()]]
+            right_action_items: [['logout', lambda x: root.logout()]]
+            
+        ScrollView:
+            
+            MDList:
+                id: data_list_id
+                padding: [10, 10, 10, 10]
