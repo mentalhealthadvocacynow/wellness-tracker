@@ -8,20 +8,24 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: kivymd/buildozer:latest
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
     
-    - name: Build APK
-      run: |
-        buildozer android debug
+    - name: Build with Buildozer
+      uses: ArtemSBulgakov/buildozer-action@v1
+      id: buildozer
+      with:
+        command: buildozer android debug
+        buildozer_version: stable
+        repository_root: .
+        cache_buildozer_global_dir: true
+        cache_buildozer_dir: true
     
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: wellness-tracker-apk
+        name: wellness-tracker-apk  
         path: bin/*.apk
         retention-days: 30
